@@ -2,27 +2,22 @@ package main
 
 import (
 	"context"
-	"log/slog"
 	"os"
 	"os/signal"
 	"runtime"
 	"syscall"
 
 	"github.com/4hmedhabib/chat_go/chat/foundation/logger"
+	"github.com/4hmedhabib/chat_go/chat/foundation/web"
 )
 
 type TraceIDFn func(ctx context.Context) string
-
-type Logger struct {
-	handler   slog.Handler
-	traceIDFn TraceIDFn
-}
 
 func main() {
 	var log *logger.Logger
 
 	traceIDFn := func(ctx context.Context) string {
-		return "" // TODO: NEED TRACE IDs
+		return web.GetTraceID(ctx).String()
 	}
 
 	log = logger.New(os.Stdout, logger.LevelInfo, "CAP", traceIDFn)
